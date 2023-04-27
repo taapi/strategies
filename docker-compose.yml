@@ -1,0 +1,34 @@
+version: "3"
+services:
+
+    # Bot
+    bot:
+        build:
+            context: ./strategy
+            dockerfile: ./Dockerfile
+        working_dir: /var/www/strategy
+        environment:
+            - BOT_ENV=dev
+        volumes:
+            - ./strategy/config.yml:/var/www/strategy/config.yml
+            - ./strategy/src:/var/www/strategy/src
+            - ./strategies/${strategy_id}:/var/www/strategy/bot
+            - ./strategies/${strategy_id}/strategy.yml:/var/www/strategy/strategy.yml
+            - ./strategies/${strategy_id}/README.md:/var/www/strategy/README.md
+        depends_on: 
+            - mongo
+        command: "npm run start-dev"
+        expose:
+            - ${bot_port}
+        ports: 
+            - ${bot_port}:${bot_port}
+
+    # MongoDB
+    mongo:
+        image: mongo:latest
+        logging:
+            driver: "none"
+        expose: 
+            - 27017
+        ports: 
+            - 27017:27017

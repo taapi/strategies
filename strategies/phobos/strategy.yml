@@ -1,0 +1,12 @@
+bot:
+    id: "phobos"
+    fsm:
+        isEnabled: true
+        tradeDelay: 1000
+        tick:
+            schedule: "15 */5 * * * *"
+    scanner:
+        isEnabled: false
+
+trading:
+    liveEnabled: false

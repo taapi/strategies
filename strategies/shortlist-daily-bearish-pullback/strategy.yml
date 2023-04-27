@@ -1,0 +1,19 @@
+shortlist:
+    id: "daily-bearish-pullback"
+    quoteAssets: [
+        "USDT"
+    ]
+    emaPeriod: 200
+
+bot:
+    id: "shortlist-daily-bearish-pullback"
+    fsm:
+        isEnabled: false
+    scanner:
+        isEnabled: true
+        assetDelay: 5000
+        tick:
+            schedule: "1 1 0 * * *"
+
+trading:
+    liveEnabled: false

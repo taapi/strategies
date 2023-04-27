@@ -1,0 +1,15 @@
+{
+  "name": "taapi-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-dev": "nodemon ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TAAPI.IO",
+  "license": "ISC",
+  "dependencies": {
+    "taapi-strategies": "^1.1.83"
+  }
+}
