@@ -26,7 +26,7 @@ class State_start extends State
         this.executeBulk().then( ta => {
 
             // If the 9 EMA is greater than the 20 EMA
-            if(ta.ema_9 > ta.ema_20) {
+            if(ta.ema_9.value > ta.ema_20.value) {
 
                 // Enter long position
                 this.enterPosition("LONG", ta.price).then( enterPositionResult => {
@@ -40,7 +40,7 @@ class State_start extends State
             } 
             
             // If the 9 EMA is less than the 20 EMA
-            else if(ta.ema_9 < ta.ema_20) {
+            else if(ta.ema_9.value < ta.ema_20.value) {
 
                 // Enter short position
                 this.enterPosition("SHORT", ta.price).then( enterPositionResult => {

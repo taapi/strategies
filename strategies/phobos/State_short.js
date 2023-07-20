@@ -22,7 +22,7 @@ class State_short extends State
         this.executeBulk().then( ta => {
 
             // If the 9 EMA is greater than the 20 EMA
-            if(ta.ema_9 > ta.ema_20) {
+            if(ta.ema_9.value > ta.ema_20.value) {
 
                 // Exit position
                 this.exitPosition().then( exitPositionResult => {
