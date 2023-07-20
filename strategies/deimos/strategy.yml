@@ -1,0 +1,18 @@
+bot:
+    id: "deimos"
+    fsm:
+        isEnabled: true
+        tradeDelay: 500
+        tick:
+            schedule: "1 */15 * * * *"
+    scanner:
+        isEnabled: true
+        assetDelay: 500
+        shortlist:
+            id: "daily-ema30-cross"
+            dbName: "strategies_shortlist-daily-ema30-cross"
+        tick:
+            schedule: "1 5 * * * *"
+
+trading:
+    liveEnabled: false

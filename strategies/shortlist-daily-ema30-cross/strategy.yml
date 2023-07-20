@@ -1,0 +1,16 @@
+shortlist:
+    id: "daily-ema30-cross" # The ID of the shortlist
+    emaPeriod: 30 # Extra custom parameter for the shortlist scanner
+
+bot:
+    id: "shortlist-daily-ema30-cross" # The ID of the bot, notice that it's the same name as the shortlist ID, but prefixed with "shortlist-"
+    fsm:
+        isEnabled: false # Disable the FSM, as this bot only scans the market to create the shortlist
+    scanner:
+        isEnabled: true
+        assetDelay: 500 # How big a delay between assets in milliseconds
+        tick:
+            schedule: "1 1 0 * * *" # Run the scanner every day at 00:01:01
+
+trading:
+    liveEnabled: false

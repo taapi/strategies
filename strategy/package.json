@@ -10,6 +10,6 @@
   "author": "TAAPI.IO",
   "license": "ISC",
   "dependencies": {
-    "taapi-strategies": "^1.1.83"
+    "taapi-strategies": "^1.1.85"
   }
 }

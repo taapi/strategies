@@ -1,10 +1,14 @@
 
+// Require the base framework state class
 const BotState = require("taapi-strategies/dist/fsm/BotState.js").default;
 
+// Create a new state class
 class State extends BotState
 {
+    // Constructor
     constructor(trade, config, database, order) {
 
+        // Call parent constructor
         super(trade, config, database, order);
 
         // Get current price
