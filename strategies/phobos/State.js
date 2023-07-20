@@ -15,10 +15,10 @@ class State extends BotState
         this.addCalculation("price", trade.interval, `price`);
 
         // Get latest closed EMA 9 value
-        this.addCalculation("ema", trade.interval, "ema_9", { period: 9, backtrack: 1 });
+        this.addCalculation("ema", trade.interval, "ema_9", { period: 9, backtrack: 1, gaps: false });
 
         // Get latest closed EMA 20 value
-        this.addCalculation("ema", trade.interval, "ema_20", { period: 20, backtrack: 1 });
+        this.addCalculation("ema", trade.interval, "ema_20", { period: 20, backtrack: 1, gaps: false });
     }
 
     async tick() {
