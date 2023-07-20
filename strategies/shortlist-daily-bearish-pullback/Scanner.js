@@ -17,7 +17,7 @@ class Scanner {
 
         for(let quoteAsset of this.config.shortlist.quoteAssets) {
 
-            this.taapiClient.getNpmClient().getExchangeSymbols("crypto", this.config.exchange.id, quoteAsset).then( async symbols => {
+            this.taapiClient.getExchangeSymbols("crypto", this.config.exchange.id, quoteAsset).then( async symbols => {
                 
                 for(let symbol of symbols) {
 

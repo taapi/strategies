@@ -18,7 +18,7 @@ class Scanner {
         this.notifications.postSlackMessage(`Scanning...`);
 
         // Get all USDT pairs from the exchange through TAAPI
-        this.taapiClient.getNpmClient().getExchangeSymbols("crypto", this.config.exchange.id, "USDT").then( async symbols => {
+        this.taapiClient.getExchangeSymbols("crypto", this.config.exchange.id, "USDT").then( async symbols => {
 
             // Loop through each symbol
             for(let s in symbols) {

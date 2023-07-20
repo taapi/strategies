@@ -15,7 +15,7 @@ class Scanner {
     async scan() {
 
         // Get all USDT pairs from the exchange through TAAPI
-        this.taapiClient.getNpmClient().getExchangeSymbols("crypto", this.config.exchange.id).then( async symbols => {
+        this.taapiClient.getExchangeSymbols("crypto", this.config.exchange.id).then( async symbols => {
 
             // Loop through each symbol
             for(let s in symbols) {
