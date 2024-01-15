@@ -66,14 +66,24 @@ class State_longBias extends State
                 ta.candles_15m.reverse();
                 ta.candles_1h.reverse();
 
+                let relativeVolume15m_current = this.calculateRelativeVolume(ta.candles_15m, 20, 0);
+                let relativeVolume15m_previous = this.calculateRelativeVolume(ta.candles_15m, 20, 1);
+
+                let hrv15m = relativeVolume15m_current > 100 || relativeVolume15m_previous > 100;
+
+                let relativeVolume1h_current = this.calculateRelativeVolume(ta.candles_1h, 20, 0);
+                let relativeVolume1h_previous = this.calculateRelativeVolume(ta.candles_1h, 20, 1);
+
+                let hrv1h = relativeVolume1h_current > 100 || relativeVolume1h_previous > 100;
+
                 // If the relative volume is low (less than 100) on the 1h, return to consolidate state
-                if(this.calculateRelativeVolume(ta.candles_1h, 20, 1) < 100) {
+                if(!hrv1h) {
                     this.notifications.postSlackMessage(`Changing state back to consolidate, because of low relative volume...`);
                     this.changeState("consolidate");
                 }
 
                 // Else, the 5m and 15m must also have high relative volume
-                else if(this.calculateRelativeVolume(ta.candles_15m, 20, 1) > 100) {
+                else if(hrv15m) {
                     
                     // Finally, all the Exponential Moving Averages must align in the correct order for being long biased
                     if(ta.ema50_1m.value > ta.ema128_1m.value && ta.ema128_1m.value > ta.ema200_1m.value &&

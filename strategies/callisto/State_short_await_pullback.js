@@ -55,11 +55,21 @@ class State_shortAwaitPullback extends State
                 ta.candles_5m.reverse();
                 ta.candles_15m.reverse();
 
+                let relativeVolume15m_current = this.calculateRelativeVolume(ta.candles_15m, 20, 0);
+                let relativeVolume15m_previous = this.calculateRelativeVolume(ta.candles_15m, 20, 1);
+
+                let hrv15m = relativeVolume15m_current > 100 || relativeVolume15m_previous > 100;
+
                 // 15m candles must have high relative volume
-                if(this.calculateRelativeVolume(ta.candles_15m, 20, 1) > 100) {
+                if(hrv15m) {
+
+                    let relativeVolume5m_current = this.calculateRelativeVolume(ta.candles_5m, 20, 0);
+                    let relativeVolume5m_previous = this.calculateRelativeVolume(ta.candles_5m, 20, 1);
+
+                    let hrv5m = relativeVolume5m_current > 100 || relativeVolume5m_previous > 100;
 
                     // 5m must too have high relative volume
-                    if(this.calculateRelativeVolume(ta.candles_5m, 20, 1) > 100) {
+                    if(hrv5m) {
 
                         // The 15m Stoch RSI must be bearish
                         if(ta.stochrsi_15m.valueFastK < ta.stochrsi_15m.valueFastD) {                        
