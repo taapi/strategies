@@ -34,6 +34,9 @@ class State_longBias extends State
         this.addCalculation("ema", "1h", "ema50_1h", { period: 50, gaps: false });
         this.addCalculation("ema", "1h", "ema128_1h", { period: 128, gaps: false });
         this.addCalculation("ema", "1h", "ema200_1h", { period: 200, gaps: false });
+
+        // Get StochRSI 1h
+        this.addCalculation("stochrsi", "1h", "stochrsi_1h", { k: 3, d: 3 });
     }
 
     /**
@@ -50,33 +53,41 @@ class State_longBias extends State
         // Fetch all indicators added both in this class and in State.js
         this.executeBulk().then( ta => {
 
-            // Reverse candles arrays
-            ta.candles_5m.reverse();
-            ta.candles_15m.reverse();
-            ta.candles_1h.reverse();
-
-            // If the relative volume is low (less than 100) on the 1h, return to consolidate state
-            if(this.calculateRelativeVolume(ta.candles_1h, 20, 1) < 100) {
-                this.notifications.postSlackMessage(`Changing state back to consolidate...`);
+            // If Stoch RSI 1h is bearish, return to consolidate state
+            if(ta.stochrsi_1h.valueFastK < ta.stochrsi_1h.valueFastD) {
+                this.notifications.postSlackMessage(`Changing state back to consolidate, because of StochRSI 1h...`);
                 this.changeState("consolidate");
             }
 
-            // Else, the 5m and 15m must also have high relative volume
-            else if(this.calculateRelativeVolume(ta.candles_5m, 20, 1) > 100 &&
-                this.calculateRelativeVolume(ta.candles_15m, 20, 1) > 100) {
-                
-                // Finally, all the Exponential Moving Averages must align in the correct order for being long biased
-                if(ta.ema50_1m.value > ta.ema128_1m.value && ta.ema128_1m.value > ta.ema200_1m.value &&
-                    ta.ema50_5m.value > ta.ema128_5m.value && ta.ema128_5m.value > ta.ema200_5m.value &&
-                    ta.ema50_15m.value > ta.ema128_15m.value && ta.ema128_15m.value > ta.ema200_15m.value &&
-                    ta.ema50_1h.value > ta.ema128_1h.value && ta.ema128_1h.value > ta.ema200_1h.value) {
+            else {
 
-                        this.notifications.postSlackMessage(`Changing state to long await pullback`);
-                    
-                        // Change state to Await Pullback
-                        this.changeState("long_await_pullback");
+                // Reverse candles arrays
+                ta.candles_5m.reverse();
+                ta.candles_15m.reverse();
+                ta.candles_1h.reverse();
+
+                // If the relative volume is low (less than 100) on the 1h, return to consolidate state
+                if(this.calculateRelativeVolume(ta.candles_1h, 20, 1) < 100) {
+                    this.notifications.postSlackMessage(`Changing state back to consolidate, because of low relative volume...`);
+                    this.changeState("consolidate");
                 }
-            }            
+
+                // Else, the 5m and 15m must also have high relative volume
+                else if(this.calculateRelativeVolume(ta.candles_15m, 20, 1) > 100) {
+                    
+                    // Finally, all the Exponential Moving Averages must align in the correct order for being long biased
+                    if(ta.ema50_1m.value > ta.ema128_1m.value && ta.ema128_1m.value > ta.ema200_1m.value &&
+                        ta.ema50_5m.value > ta.ema128_5m.value && ta.ema128_5m.value > ta.ema200_5m.value &&
+                        ta.ema50_15m.value > ta.ema128_15m.value && ta.ema128_15m.value > ta.ema200_15m.value &&
+                        ta.ema50_1h.value > ta.ema128_1h.value && ta.ema128_1h.value > ta.ema200_1h.value) {
+
+                            this.notifications.postSlackMessage(`Changing state to long await pullback`);
+                        
+                            // Change state to Await Pullback
+                            this.changeState("long_await_pullback");
+                    }
+                }            
+            }
 
         });
     }
