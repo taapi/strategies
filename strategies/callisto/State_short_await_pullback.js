@@ -18,10 +18,10 @@ class State_shortAwaitPullback extends State
         this.addCalculation("bbands", "1m", "bbands_1m", { period: 20, stddev: 2 });
 
         // Get Stoch RSI 1m, 5m, 15m, 1h
-        this.addCalculation("stochrsi", "1m", "stochrsi_1m", { k: 3, d: 3, results: 2 });
-        this.addCalculation("stochrsi", "5m", "stochrsi_5m", { k: 3, d: 3 });
-        this.addCalculation("stochrsi", "15m", "stochrsi_15m", { k: 3, d: 3 });
-        this.addCalculation("stochrsi", "1h", "stochrsi_1h", { k: 3, d: 3 });
+        this.addCalculation("stochrsi", "1m", "stochrsi_1m", { kPeriod: 3, dPeriod: 3, results: 2 });
+        this.addCalculation("stochrsi", "5m", "stochrsi_5m", { kPeriod: 3, dPeriod: 3 });
+        this.addCalculation("stochrsi", "15m", "stochrsi_15m", { kPeriod: 3, dPeriod: 3 });
+        this.addCalculation("stochrsi", "1h", "stochrsi_1h", { kPeriod: 3, dPeriod: 3 });
 
         // Get EMA 20, 50, 128, 200 on 1m candles
         this.addCalculation("ema", "1m", "ema20_1m", { period: 20, gaps: false });

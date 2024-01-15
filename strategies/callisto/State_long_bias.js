@@ -36,7 +36,7 @@ class State_longBias extends State
         this.addCalculation("ema", "1h", "ema200_1h", { period: 200, gaps: false });
 
         // Get StochRSI 1h
-        this.addCalculation("stochrsi", "1h", "stochrsi_1h", { k: 3, d: 3 });
+        this.addCalculation("stochrsi", "1h", "stochrsi_1h", { kPeriod: 3, dPeriod: 3 });
     }
 
     /**

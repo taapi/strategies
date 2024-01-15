@@ -15,10 +15,10 @@ class State_consolidate extends State
         this.addCalculation("candles", "4h", `candles_4h`, { period: 30 });
 
         // Get latest stochastic RSI value, 1h, 4h, 1d, 1w
-        this.addCalculation("stochrsi", "1h", "stochrsi_1h", { k: 3, d: 3 });
-        this.addCalculation("stochrsi", "4h", "stochrsi_4h", { k: 3, d: 3 });
-        this.addCalculation("stochrsi", "1d", "stochrsi_1d", { k: 3, d: 3 });
-        this.addCalculation("stochrsi", "1w", "stochrsi_1w", { k: 3, d: 3 });
+        this.addCalculation("stochrsi", "1h", "stochrsi_1h", { kPeriod: 3, dPeriod: 3 });
+        this.addCalculation("stochrsi", "4h", "stochrsi_4h", { kPeriod: 3, dPeriod: 3 });
+        this.addCalculation("stochrsi", "1d", "stochrsi_1d", { kPeriod: 3, dPeriod: 3 });
+        this.addCalculation("stochrsi", "1w", "stochrsi_1w", { kPeriod: 3, dPeriod: 3 });
         
     }
 
@@ -42,6 +42,14 @@ class State_consolidate extends State
 
             let relativeVolume1h = this.calculateRelativeVolume(ta.candles_1h, 20, 1);
             let relativeVolume4h = this.calculateRelativeVolume(ta.candles_4h, 20, 1);
+
+            console.log(`Relative volume 1h: ${relativeVolume1h}`);
+            console.log(`Relative volume 4h: ${relativeVolume4h}`);
+
+            console.log(`StochRSI 1h: ${ta.stochrsi_1h.valueFastK} / ${ta.stochrsi_1h.valueFastD}`);
+            console.log(`StochRSI 4h: ${ta.stochrsi_4h.valueFastK} / ${ta.stochrsi_4h.valueFastD}`);
+            console.log(`StochRSI 1d: ${ta.stochrsi_1d.valueFastK} / ${ta.stochrsi_1d.valueFastD}`);
+            console.log(`StochRSI 1w: ${ta.stochrsi_1w.valueFastK} / ${ta.stochrsi_1w.valueFastD}`);
             
             // Then check if we have high relative volume on the 1h and 4h candles
             if(relativeVolume1h > 100 && relativeVolume4h > 100) {
