@@ -55,67 +55,65 @@ class State_longAwaitPullback extends State
                 ta.candles_5m.reverse();
                 ta.candles_15m.reverse();
 
+                let relativeVolume5m_current = this.calculateRelativeVolume(ta.candles_5m, 20, 0);
+                let relativeVolume5m_previous = this.calculateRelativeVolume(ta.candles_5m, 20, 1);
+
+                let hrv5m = relativeVolume5m_current > 100 || relativeVolume5m_previous > 100;
+
                 let relativeVolume15m_current = this.calculateRelativeVolume(ta.candles_15m, 20, 0);
                 let relativeVolume15m_previous = this.calculateRelativeVolume(ta.candles_15m, 20, 1);
 
                 let hrv15m = relativeVolume15m_current > 100 || relativeVolume15m_previous > 100;
 
-                // 15m candles must have high relative volume
-                if(hrv15m) {
+                // If low 15m relative volume, return to long bias state
+                if(!hrv15m) {
+                    this.changeState("long_bias");
+                }
 
-                    let relativeVolume5m_current = this.calculateRelativeVolume(ta.candles_5m, 20, 0);
-                    let relativeVolume5m_previous = this.calculateRelativeVolume(ta.candles_5m, 20, 1);
+                // 5m and 15m candles must have high relative volume
+                else if(hrv5m) {
 
-                    let hrv5m = relativeVolume5m_current > 100 || relativeVolume5m_previous > 100;
+                    // The 15m Stoch RSI must be bullish
+                    if(ta.stochrsi_15m.valueFastK > ta.stochrsi_15m.valueFastD) {                        
 
-                    // 5m must too have high relative volume
-                    if(hrv5m) {
+                        // The 5m Stoch RSI must be bullish and less than 50
+                        if(ta.stochrsi_5m.valueFastK > ta.stochrsi_5m.valueFastD && ta.stochrsi_5m.valueFastK < 50) {
 
-                        // The 15m Stoch RSI must be bullish
-                        if(ta.stochrsi_15m.valueFastK > ta.stochrsi_15m.valueFastD) {                        
+                            // The 1m Stoch RSI must have a bullish cross and less than 30
+                            if(stochrsi_1m[0].valueFastK > stochrsi_1m[0].valueFastD && 
+                                stochrsi_1m[1].valueFastK < stochrsi_1m[1].valueFastD &&
+                                stochrsi_1m[0].valueFastK < 30) {
 
-                            // The 5m Stoch RSI must be bullish and less than 50
-                            if(ta.stochrsi_5m.valueFastK > ta.stochrsi_5m.valueFastD && ta.stochrsi_5m.valueFastK < 50) {
+                                    let currentPrice = ta.candles_5m[0].close;
+                                    let stoplossPrice = this.getStoplossPrice(ta);
+                                    let targetPrice = this.getTargetPrice(currentPrice, stoplossPrice);
 
-                                // The 1m Stoch RSI must have a bullish cross and less than 30
-                                if(stochrsi_1m[0].valueFastK > stochrsi_1m[0].valueFastD && 
-                                    stochrsi_1m[1].valueFastK < stochrsi_1m[1].valueFastD &&
-                                    stochrsi_1m[0].valueFastK < 30) {
+                                    this.notifications.postSlackMessage(`Going long!`, {
+                                        "Trade Reference": this.trade._id,
+                                        "Symbol": this.trade.symbol,
+                                        "Price": currentPrice,
+                                        "Target": targetPrice,
+                                        "Stoploss": stoplossPrice
+                                    });
 
-                                        let currentPrice = ta.candles_5m[0].close;
-                                        let stoplossPrice = this.getStoplossPrice(ta);
-                                        let targetPrice = this.getTargetPrice(currentPrice, stoplossPrice);
+                                    // Enter new long position
+                                    this.enterPosition("LONG", currentPrice, targetPrice, stoplossPrice).then( enterPositionResult => {
 
-                                        this.notifications.postSlackMessage(`Going long!`, {
-                                            "Trade Reference": this.trade._id,
-                                            "Symbol": this.trade.symbol,
-                                            "Price": currentPrice,
-                                            "Target": targetPrice,
-                                            "Stoploss": stoplossPrice
-                                        });
-
-                                        // Enter new long position
-                                        this.enterPosition("LONG", currentPrice, targetPrice, stoplossPrice).then( enterPositionResult => {
-
-                                            // Verify that whole position is filled and take profit and stoploss orders are placed
-                                            if(enterPositionResult.success) {
-                                                this.changeState("long");
-                                            }
-                                        });
-                                } else {
-                                    console.log("1m Stoch RSI did not have a bullish cross and less than 30");
-                                }
-                                
+                                        // Verify that whole position is filled and take profit and stoploss orders are placed
+                                        if(enterPositionResult.success) {
+                                            this.changeState("long");
+                                        }
+                                    });
                             } else {
-                                console.log("5m Stoch RSI not bullish");
+                                console.log("1m Stoch RSI did not have a bullish cross and less than 30");
                             }
                             
                         } else {
-                            console.log("15m Stoch RSI not bullish");
+                            console.log("5m Stoch RSI not bullish");
                         }
-
+                        
                     } else {
-                        console.log("5m relative volume too low");
+                        console.log("15m Stoch RSI not bullish");
                     }
                 } 
                 
