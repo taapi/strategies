@@ -18,7 +18,6 @@ class State_consolidate extends State
         this.addCalculation("stochrsi", "1h", "stochrsi_1h", { kPeriod: 3, dPeriod: 3 });
         this.addCalculation("stochrsi", "4h", "stochrsi_4h", { kPeriod: 3, dPeriod: 3 });
         this.addCalculation("stochrsi", "1d", "stochrsi_1d", { kPeriod: 3, dPeriod: 3 });
-        this.addCalculation("stochrsi", "1w", "stochrsi_1w", { kPeriod: 3, dPeriod: 3 });
         
     }
 
@@ -49,16 +48,14 @@ class State_consolidate extends State
             console.log(`StochRSI 1h: ${ta.stochrsi_1h.valueFastK} / ${ta.stochrsi_1h.valueFastD}`);
             console.log(`StochRSI 4h: ${ta.stochrsi_4h.valueFastK} / ${ta.stochrsi_4h.valueFastD}`);
             console.log(`StochRSI 1d: ${ta.stochrsi_1d.valueFastK} / ${ta.stochrsi_1d.valueFastD}`);
-            console.log(`StochRSI 1w: ${ta.stochrsi_1w.valueFastK} / ${ta.stochrsi_1w.valueFastD}`);
             
             // Then check if we have high relative volume on the 1h and 4h candles
             if(relativeVolume1h > 100 && relativeVolume4h > 100) {
 
                 // If Stoch RSI 1h, 4h, 1d, 1w are all bullish
-                if(ta.stochrsi_1h.valueFastK > ta.stochrsi_1h.valueFastD && 
+                if( ta.stochrsi_1h.valueFastK > ta.stochrsi_1h.valueFastD && 
                     ta.stochrsi_4h.valueFastK > ta.stochrsi_4h.valueFastD && 
-                    ta.stochrsi_1d.valueFastK > ta.stochrsi_1d.valueFastD && 
-                    ta.stochrsi_1w.valueFastK > ta.stochrsi_1w.valueFastD ) {
+                    ta.stochrsi_1d.valueFastK > ta.stochrsi_1d.valueFastD ) {
 
                         this.notifications.postSlackMessage(`Changing state to long_bias...`);
 
@@ -67,10 +64,9 @@ class State_consolidate extends State
                 } 
                 
                 // And visa versa
-                else if(ta.stochrsi_1h.valueFastK < ta.stochrsi_1h.valueFastD && 
+                else if( ta.stochrsi_1h.valueFastK < ta.stochrsi_1h.valueFastD && 
                     ta.stochrsi_4h.valueFastK < ta.stochrsi_4h.valueFastD && 
-                    ta.stochrsi_1d.valueFastK < ta.stochrsi_1d.valueFastD && 
-                    ta.stochrsi_1w.valueFastK < ta.stochrsi_1w.valueFastD ) {
+                    ta.stochrsi_1d.valueFastK < ta.stochrsi_1d.valueFastD ) {
 
                         this.notifications.postSlackMessage(`Changing state to short_bias...`);
 
