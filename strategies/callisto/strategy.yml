@@ -1,0 +1,15 @@
+bot:
+    id: "callisto"
+    fsm:
+        isEnabled: true
+        tradeDelay: 1000 # How big a delay between trades in milliseconds
+        tick:
+            schedule: "2 * * * * *"
+    scanner:
+        isEnabled: false
+        assetDelay: 500 # How big a delay between assets in milliseconds
+        tick:
+            schedule: "15 0 * * * *"
+
+trading:
+    liveEnabled: false
