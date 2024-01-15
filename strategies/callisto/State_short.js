@@ -19,10 +19,25 @@ class State_short extends State
         }
 
         // Fetch all indicators added both in this class and in State.js
-        this.executeBulk().then( ta => {
+        this.executeBulk().then( async ta => {
 
             console.log("We're short!");
-            
+
+            // Check target hit
+            if(this.isTargetHit(candles)) {
+
+                exitPositionResponse = await this.targetHit("long");
+                this.chainTrade();
+                
+            }
+
+            // Check stoploss hit
+            else if(this.isStoplossHit(candles)) {
+                    
+                exitPositionResponse = await this.stoplossHit("long", this.trade.stoplossPrice, "Stoploss");
+                this.chainTrade();
+
+            }
         });
     }
 }

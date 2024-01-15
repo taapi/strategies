@@ -28,6 +28,38 @@ class State extends BotState
         // Return the backtracked candles volume relative to the average volume
         return candles[1].volume / averageVolume * 100;
     }
+
+    async targetHit(direction) {
+        this.setExitDetails(this.trade.targetPrice);
+
+        // Notify Slack that we hit the target
+        this.notifications.postSlackMessage(`:white_check_mark: Target Hit (${direction})!`, {
+            "Trade Reference": this.trade._id,
+            "Symbol": this.trade.symbol,
+            "Price": this.trade.targetPrice,
+            "P/L": `${this.calculateProfit(direction)}%`,
+        });
+
+        // Exit position
+        return await this.exitPosition();
+    }
+
+    async stoplossHit(direction, price, reason) {
+
+        this.setExitDetails(price, reason);
+
+        // Notify Slack that we hit the stoploss
+        this.notifications.postSlackMessage(`:x: Stoploss Hit (${direction})!`, {
+            "Trade Reference": this.trade._id,
+            "Symbol": this.trade.symbol,
+            "Price": price,
+            "P/L": `${this.calculateProfit(direction)}%`,
+            "Reason": reason
+        });
+
+        // Exit position
+        return await this.exitPosition();
+    }
 }
 
 module.exports = State;
