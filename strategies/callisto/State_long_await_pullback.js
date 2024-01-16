@@ -17,7 +17,7 @@ class State_longAwaitPullback extends State
         this.addCalculation("bbands", "1m", "bbands_1m", { period: 20, stddev: 2 });
 
         // Get Stoch RSI 1m, 5m, 15m, 1h
-        this.addCalculation("stochrsi", "1m", "stochrsi_1m", { kPeriod: 3, dPeriod: 3, results: 2 });
+        this.addCalculation("stochrsi", "1m", "stochrsi_1m", { kPeriod: 3, dPeriod: 3, backtracks: 2 });
         this.addCalculation("stochrsi", "5m", "stochrsi_5m", { kPeriod: 3, dPeriod: 3 });
         this.addCalculation("stochrsi", "15m", "stochrsi_15m", { kPeriod: 3, dPeriod: 3 });
         this.addCalculation("stochrsi", "1h", "stochrsi_1h", { kPeriod: 3, dPeriod: 3 });
@@ -45,12 +45,6 @@ class State_longAwaitPullback extends State
 
             // Reverse candles arrays
             ta.candles_4h.reverse();
-
-            // Reverse Stoch RSI arrays
-            ta.stochrsi_1m.reverse();
-            ta.stochrsi_5m.reverse();
-            ta.stochrsi_15m.reverse();
-            ta.stochrsi_1h.reverse();
 
             let hrv4h = this.isHighRelativeVolume(ta.candles_4h, 20);
 
