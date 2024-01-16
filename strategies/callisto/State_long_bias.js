@@ -76,8 +76,9 @@ class State_longBias extends State
             else {
                     
                 // Finally, all the Exponential Moving Averages must align in the correct order for taking long positions
-                if(ta.ema50_5m.value > ta.ema128_5m.value && ta.ema128_5m.value > ta.ema200_5m.value &&
-                    ta.ema50_15m.value > ta.ema128_15m.value && ta.ema128_15m.value > ta.ema200_15m.value 
+                if(ta.ema50_1m.value > ta.ema128_1m.value && ta.ema128_1m.value > ta.ema200_1m.value &&
+                    ta.ema50_5m.value > ta.ema128_5m.value && ta.ema128_5m.value > ta.ema200_5m.value &&
+                    ta.ema50_15m.value > ta.ema128_15m.value && ta.ema128_15m.value > ta.ema200_15m.value
                     //&& ta.ema50_1h.value > ta.ema128_1h.value && ta.ema128_1h.value > ta.ema200_1h.value
                     ) {
 
