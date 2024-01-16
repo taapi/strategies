@@ -46,6 +46,12 @@ class State_longAwaitPullback extends State
             // Reverse candles arrays
             ta.candles_4h.reverse();
 
+            // Reverse Stoch RSI arrays
+            ta.stochrsi_1m.reverse();
+            ta.stochrsi_5m.reverse();
+            ta.stochrsi_15m.reverse();
+            ta.stochrsi_1h.reverse();
+
             let hrv4h = this.isHighRelativeVolume(ta.candles_4h, 20);
 
             // If Stoch RSI 1h is bearish, return to long bias state
@@ -67,7 +73,7 @@ class State_longAwaitPullback extends State
                 if(ta.stochrsi_15m.valueFastK > ta.stochrsi_15m.valueFastD) {                        
 
                     // The 5m Stoch RSI must be bullish and less than 50
-                    if(ta.stochrsi_5m.valueFastK > ta.stochrsi_5m.valueFastD && ta.stochrsi_5m.valueFastD < 90) {
+                    //if(ta.stochrsi_5m.valueFastK > ta.stochrsi_5m.valueFastD && ta.stochrsi_5m.valueFastD < 90) {
 
                         // The 1m Stoch RSI must have a bullish cross and less than 30
                         if(ta.stochrsi_1m[0].valueFastK > ta.stochrsi_1m[0].valueFastD && 
@@ -98,9 +104,9 @@ class State_longAwaitPullback extends State
                             console.log("1m Stoch RSI did not have a bullish cross and less than 30");
                         }
                         
-                    } else {
+                    /* } else {
                         console.log("5m Stoch RSI not bullish");
-                    }
+                    } */
                     
                 } else {
                     console.log("15m Stoch RSI not bullish");
