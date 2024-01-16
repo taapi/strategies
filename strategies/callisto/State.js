@@ -29,6 +29,14 @@ class State extends BotState
         return candles[1].volume / averageVolume * 100;
     }
 
+    isHighRelativeVolume(candles, period) {
+
+        let relativeVolume_current = this.calculateRelativeVolume(candles, period, 0);
+        let relativeVolume_previous = this.calculateRelativeVolume(candles, period, 1);
+
+        return relativeVolume_current > 100 || relativeVolume_previous > 100;
+    }
+
     async targetHit(direction) {
         this.setExitDetails(this.trade.targetPrice);
 

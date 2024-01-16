@@ -11,9 +11,9 @@ class State_shortBias extends State
         super(trade, config, database, order);
 
         // Get 5m, 15m, 1h candles
-        this.addCalculation("candles", "5m", `candles_5m`, { period: 30 });
-        this.addCalculation("candles", "15m", `candles_15m`, { period: 30 });
-        this.addCalculation("candles", "1h", `candles_1h`, { period: 30 });
+        /* this.addCalculation("candles", "5m", `candles_5m`, { period: 30 });
+        this.addCalculation("candles", "15m", `candles_15m`, { period: 30 }); */
+        this.addCalculation("candles", "4h", `candles_4h`, { period: 30 });
 
         // Get EMA 50, 128, 200 on 1m candles
         this.addCalculation("ema", "1m", "ema50_1m", { period: 50, gaps: false });
@@ -54,19 +54,9 @@ class State_shortBias extends State
         this.executeBulk().then( ta => {
 
             // Reverse candles arrays
-            ta.candles_5m.reverse();
-            ta.candles_15m.reverse();
-            ta.candles_1h.reverse();
+            ta.candles_4h.reverse();
 
-            let relativeVolume15m_current = this.calculateRelativeVolume(ta.candles_15m, 20, 0);
-            let relativeVolume15m_previous = this.calculateRelativeVolume(ta.candles_15m, 20, 1);
-
-            let hrv15m = relativeVolume15m_current > 100 || relativeVolume15m_previous > 100;
-
-            let relativeVolume1h_current = this.calculateRelativeVolume(ta.candles_1h, 20, 0);
-            let relativeVolume1h_previous = this.calculateRelativeVolume(ta.candles_1h, 20, 1);
-
-            let hrv1h = relativeVolume1h_current > 100 || relativeVolume1h_previous > 100;
+            let hrv4h = this.isHighRelativeVolume(ta.candles_4h, 20);
 
             // If Stoch RSI 1h is bullish, return to consolidate state
             if(ta.stochrsi_1h.valueFastK > ta.stochrsi_1h.valueFastD) {
@@ -75,13 +65,13 @@ class State_shortBias extends State
             }
 
             // If the relative volume is low (less than 100) on the 1h, return to consolidate state
-            else if(!hrv1h) {
-                this.notifications.postSlackMessage(`Changing state back to consolidate, because of low relative volume...`);
+            else if(!hrv4h) {
+                this.notifications.postSlackMessage(`Changing state back to consolidate, because of low relative 4h volume...`);
                 this.changeState("consolidate");
             }
 
             // Else, the 5m and 15m must also have high relative volume
-            else if(hrv15m) {
+            else {
                     
                 // Finally, all the Exponential Moving Averages must align in the correct order for taking short positions
                 if(ta.ema50_1m.value < ta.ema128_1m.value && ta.ema128_1m.value < ta.ema200_1m.value &&
