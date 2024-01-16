@@ -67,12 +67,12 @@ class State_longAwaitPullback extends State
                 if(ta.stochrsi_15m.valueFastK > ta.stochrsi_15m.valueFastD) {                        
 
                     // The 5m Stoch RSI must be bullish and less than 50
-                    if(ta.stochrsi_5m.valueFastK > ta.stochrsi_5m.valueFastD && ta.stochrsi_5m.valueFastK < 50) {
+                    if(ta.stochrsi_5m.valueFastK > ta.stochrsi_5m.valueFastD && ta.stochrsi_5m.valueFastD < 90) {
 
                         // The 1m Stoch RSI must have a bullish cross and less than 30
-                        if(stochrsi_1m[0].valueFastK > stochrsi_1m[0].valueFastD && 
-                            stochrsi_1m[1].valueFastK < stochrsi_1m[1].valueFastD &&
-                            stochrsi_1m[0].valueFastK < 30) {
+                        if(ta.stochrsi_1m[0].valueFastK > ta.stochrsi_1m[0].valueFastD && 
+                            ta.stochrsi_1m[1].valueFastK < ta.stochrsi_1m[1].valueFastD &&
+                            ta.stochrsi_1m[0].valueFastK < 30) {
 
                                 let currentPrice = ta.candles_4h[0].close;
                                 let stoplossPrice = this.getStoplossPrice(ta);
