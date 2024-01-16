@@ -48,8 +48,8 @@ class State extends BotState
             "P/L": `${this.calculateProfit(direction)}%`,
         });
 
-        // Exit position
-        return await this.exitPosition();
+        // Chain trade
+        this.chainTrade();
     }
 
     async stoplossHit(direction, price, reason) {
@@ -65,8 +65,8 @@ class State extends BotState
             "Reason": reason
         });
 
-        // Exit position
-        return await this.exitPosition();
+        // Chain trade
+        this.chainTrade();
     }
 }
 

@@ -9,6 +9,9 @@ class State_long extends State
 
         // Call the base state class constructor
         super(trade, config, database, order);
+
+        // Get 5m, 15m, 1h candles
+        this.addCalculation("candles", "1m", `candles_1m`, { period: 30 });
     }
 
     /**
@@ -25,21 +28,22 @@ class State_long extends State
         // Fetch all indicators added both in this class and in State.js
         await this.executeBulk().then( async ta => {
 
+            // Reverse candles arrays
+            //ta.candles_1m.reverse();
+
             console.log("We're long!");
 
             // Check target hit
-            if(this.isTargetHit(candles)) {
+            if(this.isTargetHit(ta.candles_1m)) {
 
-                exitPositionResponse = await this.targetHit("long");
-                this.chainTrade();
+                this.targetHit("long");                
                 
             }
 
             // Check stoploss hit
-            else if(this.isStoplossHit(candles)) {
+            else if(this.isStoplossHit(ta.candles_1m)) {
                     
-                exitPositionResponse = await this.stoplossHit("long", this.trade.stoplossPrice, "Stoploss");
-                this.chainTrade();
+                this.stoplossHit("long", this.trade.stoplossPrice, "Stoploss");
 
             }
 
